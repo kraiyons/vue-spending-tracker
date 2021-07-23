@@ -1,19 +1,98 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div>
+      <input type="text" v-model="activity" placeholder="Activity" />
+      <input type="number" v-model="amount" placeholder="Amount" />
+      <button v-if="activeId === null" @click="addActivity">Add</button>
+      <button v-else @click="commitEditActivity">Save</button>
+    </div>
+    <div class="activityList">
+      <div
+        class="activityItem"
+        v-for="(entry, index) in activityList"
+        :key="index"
+      >
+        <div>
+          {{ entry.activity }}
+        </div>
+        <div>
+          {{ entry.amount }}
+        </div>
+        <button @click="editActivity(index)">Edit</button>
+        <button @click="deleteActivity(index)">Delete</button>
+      </div>
+    </div>
+    <div>Total Spend: {{ totalSpend }}</div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  data() {
+    return {
+      activity: "",
+      amount: "",
+      activityList: [],
+      activeId: null,
+      totalSpend: 0,
+    };
+  },
+  mounted() {
+    let spendArray = localStorage.getItem("spendArray");
+    console.log({ spendArray });
+    if (spendArray) {
+      let parsedArray = JSON.parse(spendArray);
+      this.activityList = parsedArray.activityList;
+      this.totalSpend = parsedArray.totalSpend;
+    }
+  },
+  methods: {
+    addActivity() {
+      this.activityList.push({ activity: this.activity, amount: this.amount });
+      this.totalSpend += parseInt(this.amount);
+      this.activity = "";
+      this.amount = "";
+      this.saveToLocalStorage();
+    },
+    deleteActivity(index) {
+      this.totalSpend -= parseInt(this.activityList[index].amount);
+      this.activityList.splice(index, 1);
+      this.saveToLocalStorage();
+    },
+    editActivity(index) {
+      const active = this.activityList[index];
+      this.activity = active.activity;
+      this.amount = active.amount;
+      this.activeId = index;
+    },
+    commitEditActivity() {
+      const oldActivity = this.activityList[this.activeId];
+      this.activityList[this.activeId] = {
+        activity: this.activity,
+        amount: this.amount,
+      };
+      this.totalSpend -= parseInt(oldActivity.amount);
+      this.totalSpend += parseInt(this.amount);
+
+      this.activity = "";
+      this.amount = "";
+
+      this.activeId = null;
+
+      this.saveToLocalStorage();
+    },
+    saveToLocalStorage() {
+      localStorage.setItem(
+        "spendArray",
+        JSON.stringify({
+          activityList: this.activityList,
+          totalSpend: this.totalSpend,
+        })
+      );
+    },
+  },
+};
 </script>
 
 <style>
@@ -24,5 +103,19 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+}
+.activityList {
+  margin: 0 auto;
+}
+.activityItem {
+  display: flex;
+}
+.activityItem div {
+  padding: 5px 10px;
 }
 </style>
