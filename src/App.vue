@@ -28,35 +28,41 @@
 
 <script>
 export default {
-  name: "App",
+  name: 'App',
   data() {
     return {
-      activity: "",
-      amount: "",
+      activity: '',
+      amount: '',
       activityList: [],
       activeId: null,
-      totalSpend: 0,
     };
   },
   mounted() {
-    let spendArray = localStorage.getItem("spendArray");
-    console.log({ spendArray });
+    let spendArray = localStorage.getItem('spendArray');
     if (spendArray) {
       let parsedArray = JSON.parse(spendArray);
       this.activityList = parsedArray.activityList;
       this.totalSpend = parsedArray.totalSpend;
     }
   },
+  computed: {
+    totalSpend: function() {
+      let total = 0;
+      for (let i = 0; i < this.activityList.length; i++) {
+        total += parseInt(this.activityList[i].amount);
+      }
+      return total;
+    },
+  },
+
   methods: {
     addActivity() {
       this.activityList.push({ activity: this.activity, amount: this.amount });
-      this.totalSpend += parseInt(this.amount);
-      this.activity = "";
-      this.amount = "";
+      this.activity = '';
+      this.amount = '';
       this.saveToLocalStorage();
     },
     deleteActivity(index) {
-      this.totalSpend -= parseInt(this.activityList[index].amount);
       this.activityList.splice(index, 1);
       this.saveToLocalStorage();
     },
@@ -67,16 +73,13 @@ export default {
       this.activeId = index;
     },
     commitEditActivity() {
-      const oldActivity = this.activityList[this.activeId];
       this.activityList[this.activeId] = {
         activity: this.activity,
         amount: this.amount,
       };
-      this.totalSpend -= parseInt(oldActivity.amount);
-      this.totalSpend += parseInt(this.amount);
 
-      this.activity = "";
-      this.amount = "";
+      this.activity = '';
+      this.amount = '';
 
       this.activeId = null;
 
@@ -84,7 +87,7 @@ export default {
     },
     saveToLocalStorage() {
       localStorage.setItem(
-        "spendArray",
+        'spendArray',
         JSON.stringify({
           activityList: this.activityList,
           totalSpend: this.totalSpend,
