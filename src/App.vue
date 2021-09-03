@@ -31,7 +31,7 @@
         </div>
       </div>
     </div>
-    <div>Total Spend: {{ totalSpend }}</div>
+    <div class="total__spend">Total Spend: {{ totalSpend }}</div>
   </div>
 </template>
 
@@ -108,19 +108,27 @@ export default {
 </script>
 
 <style>
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-size: 18px;
+  margin: 0;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
-  padding: 40px;
   display: flex;
   flex-direction: column;
   align-content: center;
   justify-content: center;
   background-color: #b4ecb4;
+  height: auto;
+  min-height: 100%;
+  width: 100%;
 }
 input {
   padding: 0.5rem;
@@ -142,16 +150,14 @@ button:hover {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0 auto;
   padding: 1rem;
-  width: 100%;
 }
 .activity__item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 2rem;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   box-shadow: 5px 10px;
   background-color: #fff;
   border-radius: 0.5rem;
@@ -174,5 +180,9 @@ button:hover {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11),
     0 4px 4px rgba(0, 0, 0, 0.11), 0 6px 8px rgba(0, 0, 0, 0.11),
     0 8px 16px rgba(0, 0, 0, 0.11);
+}
+.total__spend {
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 </style>
