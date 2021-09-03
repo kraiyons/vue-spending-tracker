@@ -2,9 +2,12 @@
   <div id="app">
     <h1>SimpleBudget</h1>
     <p>
-      A tool you can use to keep track of your expenses. This is a POC written
-      in Vue.
+      A tool you can use to keep track of your expenses.
+      <br />This will make use of your browser's local storage to store the
+      spending information.
     </p>
+    <small>This is a POC written in Vue.</small>
+    <br />
     <div>
       <input type="text" v-model="activity" placeholder="Activity" />
       <input type="number" v-model="amount" placeholder="Amount" />
