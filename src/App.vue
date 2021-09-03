@@ -1,25 +1,34 @@
 <template>
   <div id="app">
+    <h1>SimpleBudget</h1>
+    <p>
+      A tool you can use to keep track of your expenses. This is a POC written
+      in Vue.
+    </p>
     <div>
       <input type="text" v-model="activity" placeholder="Activity" />
       <input type="number" v-model="amount" placeholder="Amount" />
       <button v-if="activeId === null" @click="addActivity">Add</button>
       <button v-else @click="commitEditActivity">Save</button>
     </div>
-    <div class="activityList">
+    <div class="activity__list">
       <div
-        class="activityItem"
+        class="activity__item shadow"
         v-for="(entry, index) in activityList"
         :key="index"
       >
-        <div>
-          {{ entry.activity }}
+        <div class="activity__details">
+          <div>
+            {{ entry.activity }}
+          </div>
+          <div>
+            {{ entry.amount }}
+          </div>
         </div>
-        <div>
-          {{ entry.amount }}
+        <div class="activity__controls">
+          <button @click="editActivity(index)">Edit</button>
+          <button @click="deleteActivity(index)">Delete</button>
         </div>
-        <button @click="editActivity(index)">Edit</button>
-        <button @click="deleteActivity(index)">Delete</button>
       </div>
     </div>
     <div>Total Spend: {{ totalSpend }}</div>
@@ -111,14 +120,59 @@ export default {
   flex-direction: column;
   align-content: center;
   justify-content: center;
+  background-color: #b4ecb4;
 }
-.activityList {
+input {
+  padding: 0.5rem;
+  border: none;
+  border-bottom: 1px solid #000;
+  outline: none;
+}
+button {
+  padding: 0.5rem;
+  border: none;
+  margin: 0 0.2rem;
+  outline: none;
+}
+button:hover {
+  cursor: pointer;
+}
+.activity__list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin: 0 auto;
+  padding: 1rem;
+  width: 100%;
 }
-.activityItem {
+.activity__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  margin: 1rem 0;
+  box-shadow: 5px 10px;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  max-width: 500px;
+  width: 100%;
+}
+.activity__item:hover {
+  background-color: #f0fff0;
+}
+
+.activity__details {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
+.activity__controls {
   display: flex;
 }
-.activityItem div {
-  padding: 5px 10px;
+.shadow {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11),
+    0 4px 4px rgba(0, 0, 0, 0.11), 0 6px 8px rgba(0, 0, 0, 0.11),
+    0 8px 16px rgba(0, 0, 0, 0.11);
 }
 </style>
