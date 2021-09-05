@@ -7,7 +7,7 @@
         <br />This will make use of your browser's local storage to store the
         spending information.
       </p>
-      <div class="disclaimer">This is a POC written in Vue.</div>
+      <div class="disclaimer">This is a POC written in Vue and pure CSS.</div>
       <br />
       <br />
       <div>
@@ -36,8 +36,8 @@
           <button @click="deleteActivity(index)">Delete</button>
         </div>
       </div>
+      <div class="total__spend"><span>Total Spend</span> {{ totalSpend }}</div>
     </div>
-    <div class="total__spend">Total Spend: {{ totalSpend }}</div>
   </div>
 </template>
 
@@ -228,5 +228,12 @@ button:hover {
 .total__spend {
   font-size: 1.2rem;
   font-weight: bold;
+  padding: 1rem 0;
+  text-align: right;
+  width: 100%;
+}
+.total__spend > span {
+  font-size: 0.6rem;
+  font-weight: normal;
 }
 </style>
