@@ -1,22 +1,25 @@
 <template>
   <div id="app">
-    <h1>SimpleBudget</h1>
-    <p>
-      A tool you can use to keep track of your expenses.
-      <br />This will make use of your browser's local storage to store the
-      spending information.
-    </p>
-    <small>This is a POC written in Vue.</small>
-    <br />
-    <div>
-      <input type="text" v-model="activity" placeholder="Activity" />
-      <input type="number" v-model="amount" placeholder="Amount" />
-      <button v-if="activeId === null" @click="addActivity">Add</button>
-      <button v-else @click="commitEditActivity">Save</button>
+    <div class="page_header">
+      <h1>SimpleBudget</h1>
+      <p>
+        A tool you can use to keep track of your expenses.
+        <br />This will make use of your browser's local storage to store the
+        spending information.
+      </p>
+      <div class="disclaimer">This is a POC written in Vue.</div>
+      <br />
+      <br />
+      <div>
+        <input type="text" v-model="activity" placeholder="Activity" />
+        <input type="number" v-model="amount" placeholder="Amount" />
+        <button v-if="activeId === null" @click="addActivity">Add</button>
+        <button v-else @click="commitEditActivity">Save</button>
+      </div>
     </div>
-    <div class="activity__list">
+    <div class="activity__list shadow" v-if="totalActivities > 0">
       <div
-        class="activity__item shadow"
+        class="activity__item "
         v-for="(entry, index) in activityList"
         :key="index"
       >
@@ -39,6 +42,9 @@
 </template>
 
 <script>
+import './assets/css/reset.css';
+import 'normalize.css';
+
 export default {
   name: 'App',
   data() {
@@ -65,18 +71,25 @@ export default {
       }
       return total;
     },
+    totalActivities: function() {
+      return this.activityList.length;
+    },
   },
 
   methods: {
     addActivity() {
+      if (this.checkIfValid()) {
+        this.showMessage(
+          "Please fill up all fields properly. Both fields shouldn't be empty and amount should be a Number"
+        );
+        return;
+      }
       this.activityList.push({ activity: this.activity, amount: this.amount });
       this.activity = '';
       this.amount = '';
-      this.saveToLocalStorage();
     },
     deleteActivity(index) {
       this.activityList.splice(index, 1);
-      this.saveToLocalStorage();
     },
     editActivity(index) {
       const active = this.activityList[index];
@@ -94,8 +107,16 @@ export default {
       this.amount = '';
 
       this.activeId = null;
-
-      this.saveToLocalStorage();
+    },
+    checkIfValid() {
+      return (
+        this.activity === '' ||
+        this.amount === '' ||
+        Number.isInteger(this.amount)
+      );
+    },
+    showMessage(msg) {
+      alert(msg);
     },
     saveToLocalStorage() {
       localStorage.setItem(
@@ -105,6 +126,11 @@ export default {
           totalSpend: this.totalSpend,
         })
       );
+    },
+  },
+  watch: {
+    activityList() {
+      this.saveToLocalStorage();
     },
   },
 };
@@ -124,14 +150,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  justify-content: center;
   background-color: #b4ecb4;
-  height: auto;
   min-height: 100%;
   width: 100%;
+}
+h1 {
+  margin: 0;
+  padding: 1rem;
+  font-weight: bold;
 }
 input {
   padding: 0.5rem;
@@ -148,36 +174,51 @@ button {
 button:hover {
   cursor: pointer;
 }
+.disclaimer {
+  font-size: 0.8rem;
+  font-style: italic;
+  padding: 1rem;
+}
 .activity__list {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+  background-color: #fff;
+  border-radius: 1rem;
+  padding: 0 1rem;
+  max-width: 500px;
+  width: 100%;
+  overflow: hidden;
+  margin: 1rem auto;
 }
 .activity__item {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem;
-  margin: 0.5rem 0;
-  box-shadow: 5px 10px;
-  background-color: #fff;
-  border-radius: 0.5rem;
-  max-width: 500px;
+  padding: 1rem;
+
   width: 100%;
+  border-bottom: 1px solid #eee;
+  transition: border 200ms ease-in;
 }
 .activity__item:hover {
   background-color: #f0fff0;
+  border-color: #00ff00;
+  border-width: 2px;
 }
 
 .activity__details {
   display: flex;
   justify-content: space-between;
-  width: 80%;
+  width: 50%;
 }
 .activity__controls {
   display: flex;
+  flex-wrap: wrap;
+  width: 50%;
+  justify-content: flex-end;
 }
 .shadow {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11),
