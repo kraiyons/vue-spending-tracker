@@ -53,6 +53,7 @@ export default {
       amount: '',
       activityList: [],
       activeId: null,
+      totalSpend: 0,
     };
   },
   mounted() {
@@ -64,13 +65,6 @@ export default {
     }
   },
   computed: {
-    totalSpend: function() {
-      let total = 0;
-      for (let i = 0; i < this.activityList.length; i++) {
-        total += parseInt(this.activityList[i].amount);
-      }
-      return total;
-    },
     totalActivities: function() {
       return this.activityList.length;
     },
@@ -127,10 +121,21 @@ export default {
         })
       );
     },
+    updateTotalSpend() {
+      let total = 0;
+      for (let i = 0; i < this.activityList.length; i++) {
+        total += parseInt(this.activityList[i].amount);
+      }
+      this.totalSpend = total;
+    },
   },
   watch: {
-    activityList() {
-      this.saveToLocalStorage();
+    activityList: {
+      deep: true,
+      handler: function() {
+        this.updateTotalSpend();
+        this.saveToLocalStorage();
+      },
     },
   },
 };
