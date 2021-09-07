@@ -154,8 +154,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  background-color: #b4ecb4;
+  color: #fff;
+  background-color: #212529;
   min-height: 100%;
   width: 100%;
 }
@@ -189,7 +189,7 @@ button:hover {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #fff;
+  background-color: #2a2e32;
   border-radius: 1rem;
   padding: 0 1rem;
   max-width: 500px;
@@ -205,12 +205,12 @@ button:hover {
   padding: 1rem;
 
   width: 100%;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #000;
   transition: border 200ms ease-in;
 }
 .activity__item:hover {
-  background-color: #f0fff0;
-  border-color: #00ff00;
+  background-color: #111;
+  border-color: #fff;
   border-width: 2px;
 }
 
